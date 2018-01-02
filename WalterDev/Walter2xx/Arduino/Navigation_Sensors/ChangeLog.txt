@@ -1,0 +1,166 @@
+	W.A.L.T.E.R. 2.0: Navigation and basic sensor reaction behaviors sketch.
+	Copyright (C) 2013 Dale A. Weber <hybotics.pdx@gmail.com>
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+	---------------------------------------------------------------------------------
+
+	Added BMSerial ports for the SSC-32 and RoboClaw 2x5 controllers;
+		defined a Motor struct to hold information about motors; added motor
+		definitions and initialization; modified moveServoPw() and moveServoDegrees()
+		to work with a BMSerial port.
+
+	Converted to using a BMSerial() port for the hardware serial console port
+
+	Converted to running the RoboClaw 2x5 motor controller in Packet Serial mode,
+		with all the goodies - encoders, speed, acceleration, and distance.
+
+	Modified moveServoPw() and moveServoDegrees() to use a pointer to the port
+
+	-------------------------------------------------------------------------------------
+	v0.1.7 ALPHA 13-Jan-2014:
+	Added ColorSensor struct for RGB color sensor data; added code to read the TCS34725
+		RGB color and TMP006 heat sensors.
+
+	Added a control pin (COLOR_SENSOR_LED, pin 4) so the LED can be turned on and off.
+
+	-------------------------------------------------------------------------------------
+	v0.1.8 ALPHA 15-Jan 2014:
+	Fixed a bug in readPING() - was not getting the duration, because code was in a comment.
+
+	Now displaying readings from all sensors in the main loop. RGB color and Heat sensors are
+		working. IMU seems to be working so far - still need to get useful information from it.
+
+	The SSC-32 doesn't seem to like SoftwareSerial ports.
+
+	I'm thinking more seriously about moving to the Arduino Mega ADK board. There is only about
+		5Kb of program memory left, RAM is low, etc. I don't think I have a choice here.
+
+	-------------------------------------------------------------------------------------
+	v0.1.9 ALPHA 18-Jan-2014:
+	Starting migration from the Arduino (BotBoarduino) to the Arduino Mega ADK board
+
+	-------------------------------------------------------------------------------------
+	v0.2.0 ALPHA 22-Jan-2014:
+	Adding display driver code from IMU_Multi_Display_Test.ino
+
+	I decided to keep the displays, because they can be useful for displaying status and
+		error information from the robot.
+
+	-------------------------------------------------------------------------------------
+	v0.2.1 ALPHA 24-Jan-2014:
+	Reorganized code, grouped similar kinds of routines together.
+
+	I discovered the problem with the I2C is with the DFRobots Sensor Shield I have for the
+		Arduino Mega ADK board. I removed the shield, rewired everything, and it's all
+		working except the DS1307 real time clock. I have another one I can build when I
+		get more solder.
+
+	-------------------------------------------------------------------------------------
+	v0.2.2 ALPHA 26-Jan-2014:
+	Added the Hybotics_10DOF_Unified library to get orientation information - pitch, roll,
+		and heading from the raw accelerometer and magnetometer (compass) data
+
+	-------------------------------------------------------------------------------------
+	v0.2.3 Teensy 3.1 ALPHA 09-Feb-2014:
+	Beginning converstion to run on the Teensy 3.1 board:
+
+	Set header definitions for the Teensy 3.1 hardware serial ports
+
+	Removed all references to the BMSerial and RoboClaw libraries, because they just aren't
+		compatible with the Teensy 3.1 right now. I am not sure how I want to or should proceed
+		with this right now.
+
+	Fixed a problem with the Hybotics_10DOF_Unified library where it was not able to find the
+		Adafruit_BMP085_Unified.h file. I switched to using my version of this library
+		(Hybotics_BMP180_Unified), and everything seems OK - more testing is needed. I should
+		probably rename this library to Hybotics_BMP180_Unified to show there are differences
+		from the Adafruit version.
+
+	Commented out the code that checks to see if the DS1307 RTC is running, because there is some
+		kind of bug in the isrunning() routine that causes it to return a failed check when the rtc
+		is running.
+
+	Added delay at the end of the main loop() to allow time to read the Serial Monitor log.
+
+	This version builds cleanly for the Teensy 3.1. Testing begins!
+	-------------------------------------------------------------------------------------
+	v0.2.4 ALPHA 11-Feb-2014:
+	Testing current code with Teensy 3.1 board.
+
+	Minor changes required to bring code into sync with the Arduino Mega ADK code
+
+	I adjusted the display routines a bit to give the combined output a nicer and easier to
+		read look.
+
+	The BMP180 Temperature/Pressure sensor is working fine.
+
+	The TCS34725 RGB color and TMP006 heat sensors are working fine.
+
+	The L3GD20 Gyro does not seem to work, apparently it is not detected - commented all Gyro
+		related code out. I will look at the Adafruit_L3GD20 library and see if I can find any
+		issues.
+
+	I am getting readings from the LSM303DLHC Accelerometer and LSM303DLHC Magnetometer (Compass),
+		but am not sure they are correct. More testing and validation is needed.
+
+	-------------------------------------------------------------------------------------
+	v0.2.5 ALPHA 12-Feb-2014:
+	Changed the COLOR_SENSOR_LED from pin 4 to pin 11. Pin 4 conflicted with the
+		location of the PING sensors on pins 4 to 6.
+
+	Added the build version, date, and board to the heading announcement.
+
+	I've activated all RoboClaw related code now, and everything builds and loads into the
+		Teensy 3.1 now.
+
+	Starting to test Paul's fixes to the BMSerial and RoboClaw libraries. I have communication
+		on Serial2 (pins 9, 10) and Serial3 (pins 7, 8) at 115200 with the SSC-32, but nothing
+		on Serial (pins 0, 1).
+
+	I've added many console.println() statements to trace how far the code is executing
+
+	This is the version running on my Teensy 3.1 now.
+
+	---------------------------------------------------------------------------------------
+	v0.2.6 ALPHA 21-Feb-2014:
+	Added the scanArea() routine to use the pan/tilt to scan an arc up to 180 degrees and
+		store sensor readings.
+
+	---------------------------------------------------------------------------------------
+	v0.2.7 ALPHA 23-Feb-2014
+	I can't remember what I did for this version, sorry.
+
+	---------------------------------------------------------------------------------------
+	v0.3.0 ALPHA 07-Mar-2014:
+	Ported over the new code for the SSC-32 routines from the SES Rover - moveServoPw(),
+		moveServoDegrees(), and scanArea().
+
+	---------------------------------------------------------------------------------------
+	v0.4.0 ALPHA 11-Mar-2014:
+	Many changes and new routines added!
+
+	All arc angles are now stored as 0 to 180 degrees.
+	All error codes are >= 3000 now.
+
+	NEW routines: servoPulseAdjustmentUS(), degreesToPulseUS(), pulseToDegrees(), nextValidPositionDegrees()
+
+	Modified moveServoPw(), moveServoDegrees(), and scanArea() to use the new routines.
+
+	---------------------------------------------------------------------------------------
+	v0.4.3 ALPHA 15-Mar-2014:
+	Working on motion routines now.
+	I'm finally geting response from the RoboClaw 2x5 motor controller.
+	Motor control code works!
+	
