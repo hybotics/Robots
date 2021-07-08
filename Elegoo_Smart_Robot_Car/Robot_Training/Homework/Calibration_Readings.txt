@@ -1,0 +1,12 @@
+Forward: 10' 6" = 10.83'; Rate = distance / time = 10.83 / 5 = 2.166 feet/sec; rate = distance / time;
+  time = distance / rate feet/sec [* 1000 for mSec]
+
+Reverse; 10' 8' = 10.50'; rate = distance / time = 10.50 / 5 = 2.10 feet/sec; rate = distance / time;
+    time = distance / rate feet/sec [* 1000 for mSec]
+
+Turn Right: 1455 degrees; Rate = degrees / time = 1455 / 5 = 289 deg/sec
+
+Turn Left: 1455 degrees; Rate = degrees / time = 1455 / 5 = 289 deg/sec
+
+
+

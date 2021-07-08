@@ -1,0 +1,5 @@
+01-Sep-2014:
+	Installed the 2.8" Resistive PiTFT, and ran the new automatic software setup script.
+		It's working great so far, but I still have to manually calibrate the display.
+
+	Added the Python/SetServos.py script for setting the center point and limits for servos

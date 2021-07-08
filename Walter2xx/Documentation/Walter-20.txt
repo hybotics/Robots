@@ -1,0 +1,30 @@
+W.A.L.T.E.R. 2.0 Documentation
+----------------------------------------------------------------------------------------
+
+My current Botboarduino pin allocations are:
+
+0, 1				--> Hardware serial port, for programming and wireless
+2, 3				--> Software I2C
+4					--> TCS34725 Color Sensor LED switch
+5					--> Speaker
+6, 7, 8				--> Parallax PING sensors
+9, 10				--> Software Serial for the SSC-32 (RX, TX)
+11, 12				--> Software Serial for the RoboClaw 2x5 (RX, TX)
+13					--> On board standard Arduino LED
+
+Analog 0, 1, 2, 3	--> Sharp IR Sensors
+Analog 4, 5			--> Hardware I2C
+
+----------------------------------------------------------------------------------------
+
+Current Navigation sketch on BotBoarduino:
+
+Sketch uses 23,198 bytes (75%) of program storage space. Maximum is 30,720 bytes.
+Global variables use 1,682 bytes (82%) of dynamic memory, leaving 366 bytes for local variables.
+Maximum is 2,048 bytes. Low memory available, stability problems may occur.
+
+----------------------------------------------------------------------------------------
+
+	I haven't even written any navigation behaviors, or gotten useful information from the IMU
+and other sensors yet. I think I am going to have to switch the main processor from the
+BotBoarduino to my new Arduino Mega ADK board with the nice shield.
